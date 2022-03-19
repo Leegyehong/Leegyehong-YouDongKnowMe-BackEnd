@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  django:
+    build: .
+    hostname: django
+    container_name: Django
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/home/youdongknowme/
+    command: bash -c "echo 'django START'
+      && pip install psycopg2-binary --no-binary psycopg2-binary
+      && cd /home/youdongknowme/main
+      && python manage.py makemigrations
+      && python manage.py migrate
+      && python manage.py runserver 0:8000"
+    depends_on:
+      - postgreSQL
+    tty: true
+
+  #개발DB
+  postgres:
+    container_name: postgreSQL
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

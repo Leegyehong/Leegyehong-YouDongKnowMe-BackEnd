@@ -1,0 +1,4 @@
+root_url : https://www.dongyang.ac.kr/dmu_23222/1797/subview.do
+data_dir : ./crawler/test/
+
+major_name : 컴소과
