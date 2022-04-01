@@ -1,4 +1,4 @@
-FROM python:3.9.10-slim-buster
+FROM --platform=linux/amd64 python:3.9.10-slim-buster
 WORKDIR /usr/src
 ENV PYTHONUNBUFFERED 1
 COPY ./requirements.txt /home/youdongknowme/requirements.txt
