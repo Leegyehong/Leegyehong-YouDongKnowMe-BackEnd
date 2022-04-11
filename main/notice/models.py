@@ -116,11 +116,14 @@ class DjangoSession(models.Model):
 
 
 class Test(models.Model):
-    id = models.BigIntegerField(blank=True, primary_key = True)
+    class Test(models.Model):
     num = models.BigIntegerField(blank=True, null=True)
     major = models.TextField(blank=True, null=True)
     title = models.TextField(blank=True, null=True)
     writer = models.TextField(blank=True, null=True)
+    id = models.BigIntegerField(primary_key=True)
+    test = models.TextField(blank=True, null=True)
+    filename = models.CharField(max_length=1000, blank=True, null=True)
 
     class Meta:
         managed = False
