@@ -116,7 +116,6 @@ class DjangoSession(models.Model):
 
 
 class Test(models.Model):
-    class Test(models.Model):
     num = models.BigIntegerField(blank=True, null=True)
     major = models.TextField(blank=True, null=True)
     title = models.TextField(blank=True, null=True)
