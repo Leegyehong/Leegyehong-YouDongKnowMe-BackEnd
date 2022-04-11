@@ -17,5 +17,8 @@ class NoticeList(View):
 class NoticeDetail(View):
     def get(self, requset, noticenum, major):
         noticedetail = Test.objects.filter(num = noticenum, major = major)
-        data = serializers.serialize("json",list(noticedetail),fields = ('num','title','writer','info','filename','fileurl'))   
+        data = serializers.serialize("json",noticedetail,fields = ('num','title','writer','info','filename','fileurl'))   
+        temp = json.loads(data)
+        temp[0]['fields']['filename'] = temp[0]['fields']['filename'].split()
+        data = json.dumps(temp, indent=2, ensure_ascii=False)
         return HttpResponse(content=data)
