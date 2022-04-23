@@ -13,6 +13,10 @@ from webdriver_manager.chrome import ChromeDriverManager
 from dataclasses import dataclass
 
 from src.noti import NotiCrawler
+
+import pandas as pd
+from sqlalchemy import create_engine 
+from tabulate import tabulate
 #from utils.drivers.unzipper import InstallDriver
 
 
@@ -64,7 +68,7 @@ def main(config):
     crawler = initate_crawler(driver=driver, 
                             config=config,
                             root_url=config.root_url)
-    
+    crawler.get_data(config)
     crawler.close_driver()
     
     
@@ -77,8 +81,10 @@ if __name__ =='__main__':
                         default='dmu-crawling\\config\\dmu\\test\\dmu_컴퓨터공학부_컴소과_공지사항.yaml',
                         help='target config yaml file path')
     args = parser.parse_args()
-    
+
     config = Config(read_config(args.config_path))
     
     main(config)
+    
+    
     

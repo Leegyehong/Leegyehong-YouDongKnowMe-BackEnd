@@ -16,6 +16,10 @@ import json
 import datetime
 from uuid import uuid4
 import time
+import pandas as pd
+
+from sqlalchemy import create_engine 
+
 
 class NotiCrawler(CrawlerBase):
     def __init__(self,
@@ -38,5 +42,63 @@ class NotiCrawler(CrawlerBase):
             print(f'SUCCESS | Move to Root | {self.root_url}')
         except Exception as e:
             print(f'FAIL | Move to Root | {self.root_url}')
-            
     
+    def get_data(self, config):
+        driver = self.driver
+        tr = driver.find_elements_by_css_selector('#_combBbs > div > table > tbody > tr')
+        
+        df = pd.DataFrame(columns=['num', 'title' ,'writer', 'date', 'content' ,'file_url'])
+        while True:
+            time.sleep(2)
+
+            for i in range(len(tr)):
+                tr = driver.find_elements_by_css_selector('#_combBbs > div > table > tbody > tr')
+                print('meta crawling start')
+                num = tr[i].find_element_by_css_selector('.td-num').text
+                title = tr[i].find_element_by_css_selector('.td-subject').text
+                writer = tr[i].find_element_by_css_selector('.td-write').text
+                date = tr[i].find_element_by_css_selector('.td-date').text
+                add_file = tr[i].find_element_by_css_selector('.td-file').text
+                print(num, title, writer, date, add_file)
+                print('meta crawling end')
+                file_list = []
+                time.sleep(2)
+                tr[i].find_element_by_css_selector('.td-subject').click()
+                time.sleep(2)
+                print('content crawling start')
+                
+                content = driver.find_element_by_xpath('//*[@id="_combBbs"]/div[2]').text
+                if int(add_file)>0:
+                    insert_file_url = driver.find_elements_by_css_selector('#_combBbs > div.view-file > dl > dd > ul > li a')
+                    
+                    for insert_url in insert_file_url:
+                        file_url = insert_url.get_attribute('href')
+                        file_list.append(file_url)
+                print('content crawling end')
+                driver.back()
+                time.sleep(2)
+                df = df.append(pd.Series([num, title, writer, date, content ,' '.join(f for f in file_list)], index=df.columns), ignore_index= True)
+            time.sleep(1)
+            
+            pages = driver.find_elements_by_css_selector('#_combBbs > form:nth-child(3) > div > div > ul >li')
+            page_now = driver.find_element_by_css_selector('#_combBbs > form:nth-child(3) > div > div > ul >li > strong')
+            
+            if int(pages[-1].text) == int(page_now.text):
+                try:
+                    driver.find_element_by_css_selector('#_combBbs > form:nth-child(3) > div > div > a._next').click()
+                except:
+                    print("crawling End")
+                    break
+            else:
+                for page in pages:
+                    if int(page.text) == int(page_now.text)+1 :
+                        page.click()
+                        break
+        
+        
+        df.to_csv(f'./{config.indicator}.csv', index=False)
+        data = pd.read_csv(f'./컴소과.csv')
+        engine = create_engine("postgresql://postgres:postgres@localhost:5432/CrawledData", convert_unicode = False, connect_args={'connect_timeout': 3})
+        conn = engine.connect()
+        data.to_sql(name='test5',con = conn, if_exists='append')
+        conn.close()
