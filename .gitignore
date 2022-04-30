@@ -170,3 +170,10 @@ cython_debug/
 migrations/
 .DS_Store
 crawler/*
+.postgresql
+logs/
+plugins/
+temp/
+airflow-webserver.pid
+airflow.cfg
+webserver_config.py
