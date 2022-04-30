@@ -36,6 +36,7 @@ To get started with the code examples, start Airflow, Django, PostgreSQL in dock
     docker-compose up -d
 
 Wait for a few seconds and you should be able to access the 
+<br></br>
 Airflow - http://localhost:8080/
 Django - http://localhost:8000/
 
