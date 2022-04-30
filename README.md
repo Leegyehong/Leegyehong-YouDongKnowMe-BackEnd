@@ -38,6 +38,7 @@ To get started with the code examples, start Airflow, Django, PostgreSQL in dock
 Wait for a few seconds and you should be able to access the 
 <br></br>
 Airflow - http://localhost:8080/
+<br></br>
 Django - http://localhost:8000/
 
 To stop running the examples, run the following command:
