@@ -85,6 +85,3 @@ if __name__ =='__main__':
     config = Config(read_config(args.config_path))
     
     main(config)
-    
-    
-    

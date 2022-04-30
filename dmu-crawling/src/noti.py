@@ -47,7 +47,7 @@ class NotiCrawler(CrawlerBase):
         driver = self.driver
         tr = driver.find_elements_by_css_selector('#_combBbs > div > table > tbody > tr')
         
-        df = pd.DataFrame(columns=['num', 'title' ,'writer', 'date', 'content' ,'file_url'])
+        df = pd.DataFrame(columns=['num', 'title' ,'writer', 'date', 'content', 'img_url','file_url'])
         while True:
             time.sleep(2)
 
@@ -68,6 +68,10 @@ class NotiCrawler(CrawlerBase):
                 print('content crawling start')
                 
                 content = driver.find_element_by_xpath('//*[@id="_combBbs"]/div[2]').text
+                imgs = driver.find_elements_by_css_selector('#_combBbs > div.view-con  img')
+                img_url_list = []
+                for img in imgs:
+                    img_url_list.append(img.get_attribute('src'))
                 if int(add_file)>0:
                     insert_file_url = driver.find_elements_by_css_selector('#_combBbs > div.view-file > dl > dd > ul > li a')
                     
@@ -77,7 +81,7 @@ class NotiCrawler(CrawlerBase):
                 print('content crawling end')
                 driver.back()
                 time.sleep(2)
-                df = df.append(pd.Series([num, title, writer, date, content ,' '.join(f for f in file_list)], index=df.columns), ignore_index= True)
+                df = df.append(pd.Series([num, title, writer, date, content, ' '.join(f for f in img_url_list) ,' '.join(f for f in file_list)], index=df.columns), ignore_index= True)
             time.sleep(1)
             
             pages = driver.find_elements_by_css_selector('#_combBbs > form:nth-child(3) > div > div > ul >li')
@@ -97,8 +101,10 @@ class NotiCrawler(CrawlerBase):
         
         
         df.to_csv(f'./{config.indicator}.csv', index=False)
-        data = pd.read_csv(f'./컴소과.csv')
+        data = pd.read_csv(f'./{config.indicator}.csv')
         engine = create_engine("postgresql://postgres:postgres@localhost:5432/CrawledData", convert_unicode = False, connect_args={'connect_timeout': 3})
         conn = engine.connect()
-        data.to_sql(name='test5',con = conn, if_exists='append')
+        data.to_sql(name='noti',con = conn, if_exists='append')
         conn.close()
+        
+        
