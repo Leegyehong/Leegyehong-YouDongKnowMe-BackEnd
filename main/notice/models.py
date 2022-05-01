@@ -83,7 +83,8 @@ class DjangoAdminLog(models.Model):
     object_repr = models.CharField(max_length=200)
     action_flag = models.SmallIntegerField()
     change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
+    content_type = models.ForeignKey(
+        'DjangoContentType', models.DO_NOTHING, blank=True, null=True)
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
 
     class Meta:
@@ -123,11 +124,11 @@ class DjangoSession(models.Model):
 
 
 class Test(models.Model):
-    num = models.BigIntegerField()
-    id = models.BigIntegerField(primary_key=True)
+    num = models.TextField(primary_key=True)
     title = models.TextField(blank=True, null=True)
     writer = models.TextField(blank=True, null=True)
-    date = models.DateField(blank=True, null=True)
+    img = models.TextField(blank=True, null=True)
+    date = models.TextField(blank=True, null=True)
     content = models.TextField(blank=True, null=True)
     file_url = models.TextField(blank=True, null=True)
 
