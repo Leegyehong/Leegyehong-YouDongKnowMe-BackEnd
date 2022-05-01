@@ -2,3 +2,5 @@ Django
 selenium
 webdriver-manager
 PyYaml
+pandas
+sqlalchemy
