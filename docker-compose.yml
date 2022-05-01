@@ -12,6 +12,8 @@ services:
       && pip install psycopg2-binary --no-binary psycopg2-binary
       && cd /home/youdongknowme && python insert_data.py
       && cd /home/youdongknowme/main
+      && rm -rf */migrations/000*.py
+      && python manage.py inspectdb --database=crawled_data > 'notice/models.py'
       && python manage.py makemigrations
       && python manage.py migrate
       && python manage.py runserver 0:8000"

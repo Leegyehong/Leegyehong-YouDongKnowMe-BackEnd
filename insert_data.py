@@ -9,4 +9,6 @@ if __name__ == "__main__":
     engine = create_engine("postgresql://postgres:postgres@postgres:5432/crawled_data", convert_unicode = False, connect_args={'connect_timeout': 3})
     conn = engine.connect()
     data.to_sql(name='noti',con = conn, if_exists='replace')
+    with conn as con:
+        con.execute("Alter table noti add primary key (index);")
     conn.close()

@@ -79,7 +79,15 @@ DATABASES = {
         'PORT': '5432',
         'USER': 'postgres',
         'PASSWORD': 'postgres'
-    }
+    },
+   'crawled_data':{
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'crawled_data',
+        'HOST': 'postgres',
+        'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres'
+   }
 }
 
 
