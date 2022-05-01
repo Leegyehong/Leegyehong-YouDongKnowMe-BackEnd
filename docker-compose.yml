@@ -10,6 +10,7 @@ services:
       - .:/home/youdongknowme/
     command: bash -c "echo 'django START'
       && pip install psycopg2-binary --no-binary psycopg2-binary
+      && cd /home/youdongknowme && python insert_data.py
       && cd /home/youdongknowme/main
       && python manage.py makemigrations
       && python manage.py migrate
@@ -27,3 +28,5 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./postgresql/init/:/docker-entrypoint-initdb.d/
