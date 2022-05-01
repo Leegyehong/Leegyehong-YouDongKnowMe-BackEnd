@@ -30,7 +30,7 @@ class NoticeList(View):
     def get(self, requset):
         pass
         try:
-            notice = Noti.objects.using('crawled_data').all()
+            notice = Noti.objects.using('crawled_data').all().order_by('-num')
             if notice.count() == 0:
                 raise Exception()
             else:
@@ -45,7 +45,7 @@ class NoticeList(View):
 class NoticeDetail(View):
 
     def get(self, requset, noticenum):
-        noticedetail = Noti.objects.using('crawled_data').filter(num=noticenum)
+        noticedetail = Noti.objects.using('crawled_data').filter(num=noticenum).order_by('-num')
         data = serializers.serialize("json", noticedetail, fields=(
             'num', 'title', 'writer', 'content', 'file_url', 'date', 'img_url'))
         temp = json.loads(data)
