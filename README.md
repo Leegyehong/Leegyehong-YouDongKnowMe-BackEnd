@@ -31,7 +31,7 @@ Target Site Information
 
 ## Usage
 
-To get started with the code examples, start Airflow, Django, PostgreSQL in docker using the following command:
+To get started with the project, start Airflow, Django, PostgreSQL in docker using the following command:
 
     docker-compose up -d
 
@@ -41,7 +41,7 @@ Airflow - http://localhost:8080/
 <br></br>
 Django - http://localhost:8000/
 
-To stop running the examples, run the following command:
+To stop running the project, run the following command:
 
     docker-compose down
 
