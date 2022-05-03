@@ -81,7 +81,7 @@ class NoticeDetail(View):
     
     def get(self, requset, noticenum, major):
         try:
-            noticedetail = Test.objects.using('crawled_data').filter(num = noticenum, major = major).order_by('-num')
+            noticedetail = Noti.objects.using('crawled_data').filter(num = noticenum, major = major).order_by('-num')
             data = serializers.serialize("json", noticedetail, fields=(
                 'num', 'title', 'writer', 'content', 'file_url', 'date', 'img_url'))
             temp = json.loads(data)
@@ -102,6 +102,23 @@ class NoticeDetail(View):
 """
 
 class NoticeSearch(View):  
+    def get(self, requset, search):
+        try :
+            searchList = Noti.objects.using('crawled_data').filter(title__contains = search).order_by('-num')
+            if searchList.count() == 0:
+                raise Exception()
+            else:
+                data = serializers.serialize("json", list(
+                    searchList), fields=('num', 'title','date', 'writer'))
+                temp = json.loads(data)
+                datalist = []  
+                for i in range(len(temp)):
+                    datalist.append(temp[i]['fields'])
+                data = json.dumps(datalist, indent=2, ensure_ascii=False)
+                return HttpResponse(data, content_type="application/json")
+        except Exception as e:
+            return JsonResponse({'message':'error'},status=HTTPStatus.BAD_REQUEST)
+    """
     def get(self, requset, search, major):
         try :
             searchList = Noti.objects.using('crawled_data').filter(title__contains = search, major = major).order_by('-num')
@@ -118,3 +135,4 @@ class NoticeSearch(View):
                 return HttpResponse(data, content_type="application/json")
         except Exception as e:
             return JsonResponse({'message':'error'},status=HTTPStatus.BAD_REQUEST)
+    """
