@@ -9,5 +9,5 @@ urlpatterns = [
     #path('<int:major>/notice/<int:noticenum>', views.NoticeDetail.as_view())
     path('notice/<int:noticenum>', views.NoticeDetail.as_view()),
     #path('<int:major>/notice/<str:search>',views.NoticeSearch.as_view())
-    path('notice/<str:search>',views.NoticeSearch.as_view())
+    path('notice/search', views.NoticeSearch.as_view(), name='keyword')
 ]
