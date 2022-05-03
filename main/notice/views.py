@@ -106,7 +106,7 @@ class NoticeSearch(View):
         try:
             keyword = request.GET['keyword']
             print(keyword)
-            searchList = Noti.objects.filter(
+            searchList = Noti.objects.using('crawled_data').filter(
                 title__contains=keyword).order_by('-num')
             if searchList.count() == 0:
                 raise Exception()
