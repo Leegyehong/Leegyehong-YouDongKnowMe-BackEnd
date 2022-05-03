@@ -101,23 +101,26 @@ class NoticeDetail(View):
             return JsonResponse({'message':'error'},status=HTTPStatus.BAD_REQUEST)
 """
 
-class NoticeSearch(View):  
-    def get(self, requset, search):
-        try :
-            searchList = Noti.objects.using('crawled_data').filter(title__contains = search).order_by('-num')
+class NoticeSearch(View):
+    def get(self, request):
+        try:
+            keyword = request.GET['keyword']
+            print(keyword)
+            searchList = Noti.objects.filter(
+                title__contains=keyword).order_by('-num')
             if searchList.count() == 0:
                 raise Exception()
             else:
                 data = serializers.serialize("json", list(
-                    searchList), fields=('num', 'title','date', 'writer'))
+                    searchList), fields=('num', 'title', 'date', 'writer'))
                 temp = json.loads(data)
-                datalist = []  
+                datalist = []
                 for i in range(len(temp)):
                     datalist.append(temp[i]['fields'])
                 data = json.dumps(datalist, indent=2, ensure_ascii=False)
                 return HttpResponse(data, content_type="application/json")
         except Exception as e:
-            return JsonResponse({'message':'error'},status=HTTPStatus.BAD_REQUEST)
+            return JsonResponse({'message': 'error'}, status=HTTPStatus.BAD_REQUEST)
     """
     def get(self, requset, search, major):
         try :
