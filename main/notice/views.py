@@ -62,8 +62,11 @@ class NoticeDetail(View):
             temp = json.loads(data)
             
             for i in temp[0]['fields']:
-                if(temp[0]['fields'][i] == None or temp[0]['fields'][i].replace(" ", "") == ""):
-                    temp[0]['fields'][i] = ""
+                try:
+                    if(temp[0]['fields'][i] == None or temp[0]['fields'][i].replace(" ", "") == ""):
+                        temp[0]['fields'][i] = ""
+                except:
+                    pass
                 
             if(temp[0]['fields']['file_url'] != ""):
                 temp[0]['fields']['file_url'] = temp[0]['fields']['file_url'].split()
@@ -75,7 +78,7 @@ class NoticeDetail(View):
         
         except Exception as e:
             return JsonResponse({'message':'error'},status=HTTPStatus.BAD_REQUEST)
-   
+
 """
    class NoticeDetail(View):
     
