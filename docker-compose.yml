@@ -15,7 +15,9 @@ x-airflow-image: &airflow_image apache/airflow:2.2.5-python3.9
 
 services:
   django:
-    build: .
+    build:
+      context: .
+      dockerfile: dockerfile
     hostname: django
     container_name: Django
     ports:

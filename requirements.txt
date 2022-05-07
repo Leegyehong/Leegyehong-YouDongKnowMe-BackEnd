@@ -4,3 +4,4 @@ webdriver-manager
 PyYaml
 pandas
 sqlalchemy
+PyJWT==2.3.0
