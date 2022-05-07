@@ -62,7 +62,7 @@ class NoticeDetail(View):
             temp = json.loads(data)
             
             for i in temp[0]['fields']:
-                if(type(temp[0]['fields'][i]) == str):
+                if(type(temp[0]['fields'][i]) != int):
                     if(temp[0]['fields'][i] == None or temp[0]['fields'][i].replace(" ", "") == ""):
                         temp[0]['fields'][i] = []
                 
