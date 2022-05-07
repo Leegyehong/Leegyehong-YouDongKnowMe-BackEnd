@@ -20,9 +20,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-w1c9en5v&6c3zm&##$p!i#uhr3p-4w^n0e@p4_g+en3@eyn-le'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
+# 개발용 주석처리할 것
+DEBUG = True
 ALLOWED_HOSTS = ['*']
+
+# 서버용 서버에서는 주석풀 것
+#DEBUG = False
+#ALLOWED_HOSTS = ['13.125.202.140', 'ec2-13-125-202-140.ap-northeast-2.compute.amazonaws.com']
 
 
 # Application definition
@@ -34,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'notice'
+    'notice',
+    'apikey'
 ]
 
 MIDDLEWARE = [
@@ -45,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apikey.src.auth.middleware.KeyAuthorize'
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -131,3 +138,5 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+PYJWT_SECRET_KEY = "jwtleegyehong"
