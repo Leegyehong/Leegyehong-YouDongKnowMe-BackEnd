@@ -45,13 +45,13 @@ class NotiCrawler(CrawlerBase):
     
     def get_data(self, config):
         driver = self.driver
-        tr = driver.find_elements_by_css_selector('#_combBbs > div > table > tbody > tr')
         
-        df = pd.DataFrame(columns=['num', 'title' ,'writer', 'date', 'content', 'img_url','file_url'])
+        df = pd.DataFrame(columns=['major_code', 'num', 'title' ,'writer', 'date', 'content', 'img_url','file_url'])
         while True:
             time.sleep(2)
-
+            tr = driver.find_elements_by_css_selector('#_combBbs > div > table > tbody > tr')
             for i in range(len(tr)):
+                print(i)
                 tr = driver.find_elements_by_css_selector('#_combBbs > div > table > tbody > tr')
                 print('meta crawling start')
                 num = tr[i].find_element_by_css_selector('.td-num').text
@@ -62,9 +62,9 @@ class NotiCrawler(CrawlerBase):
                 print(num, title, writer, date, add_file)
                 print('meta crawling end')
                 file_list = []
-                time.sleep(2)
+                time.sleep(1)
                 tr[i].find_element_by_css_selector('.td-subject').click()
-                time.sleep(2)
+                time.sleep(1)
                 print('content crawling start')
                 
                 content = driver.find_element_by_xpath('//*[@id="_combBbs"]/div[2]').text
@@ -77,11 +77,12 @@ class NotiCrawler(CrawlerBase):
                     
                     for insert_url in insert_file_url:
                         file_url = insert_url.get_attribute('href')
-                        file_list.append(file_url)
+                        file_title = insert_url.text
+                        file_list.append({file_url:file_title})
                 print('content crawling end')
                 driver.back()
-                time.sleep(2)
-                df = df.append(pd.Series([num, title, writer, date, content, ' '.join(f for f in img_url_list) ,' '.join(f for f in file_list)], index=df.columns), ignore_index= True)
+                time.sleep(1)
+                df = df.append(pd.Series([config.major_code, num, title, writer, date, content, ' '.join(f for f in img_url_list) ,file_list], index=df.columns), ignore_index= True)
             time.sleep(1)
             
             pages = driver.find_elements_by_css_selector('#_combBbs > form:nth-child(3) > div > div > ul >li')
@@ -101,10 +102,10 @@ class NotiCrawler(CrawlerBase):
         
         
         df.to_csv(f'./{config.indicator}.csv', index=False)
-        data = pd.read_csv(f'./{config.indicator}.csv')
-        engine = create_engine("postgresql://postgres:postgres@localhost:5432/CrawledData", convert_unicode = False, connect_args={'connect_timeout': 3})
-        conn = engine.connect()
-        data.to_sql(name='noti',con = conn, if_exists='append')
-        conn.close()
+        # data = pd.read_csv(f'./{config.indicator}.csv')
+        # engine = create_engine("postgresql://postgres:postgres@localhost:5432/CrawledData", convert_unicode = False, connect_args={'connect_timeout': 3})
+        # conn = engine.connect()
+        # data.to_sql(name='noti',con = conn, if_exists='append')
+        # conn.close()
         
         
