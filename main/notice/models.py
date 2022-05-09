@@ -10,6 +10,7 @@ from django.db import models
 
 class Noti(models.Model):
     index = models.BigIntegerField(primary_key=True)
+    major_code = models.BigIntegerField(blank=True, null=True)
     num = models.BigIntegerField(blank=True, null=True)
     title = models.TextField(blank=True, null=True)
     writer = models.TextField(blank=True, null=True)
