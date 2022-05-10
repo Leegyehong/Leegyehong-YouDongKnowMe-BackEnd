@@ -31,7 +31,6 @@ class NoticeList(View):
             return JsonResponse({'message':str(e)},status=HTTPStatus.BAD_REQUEST)
 
 class NoticeDetail(View):
-
     def get(self, request, noticenum,major):
         try:
             noticedetail = Noti.objects.using('crawled_data').filter(num = noticenum,major_code = major).order_by('-num')
@@ -40,21 +39,28 @@ class NoticeDetail(View):
                 'num', 'title', 'writer', 'content', 'file_url', 'date', 'img_url'))
             
             temp = json.loads(data)
-            for i in temp[0]['fields']:
-                if(type(temp[0]['fields'][i]) != int):
-                    if(temp[0]['fields'][i] == None or temp[0]['fields'][i].replace(" ", "") == ""):
-                        temp[0]['fields'][i] = []
-            file_data = json.loads(temp[0]['fields']['file_url'].replace("'","\"")) 
-            temp[0]['fields']['file_url'] = []
-            for i in range(len(file_data)):
-              temp[0]['fields']['file_url'] += file_data[i].items()
-            if(temp[0]['fields']['img_url'] != []):
+            
+            if(temp[0]['fields']['img_url'] == None):
+                temp[0]['fields']['img_url'] = [""]
+            else:
                 temp[0]['fields']['img_url'] = temp[0]['fields']['img_url'].split()
+            
+            if(temp[0]['fields']['file_url'] == "[]"):
+                temp[0]['fields']['file_url'] = [""]
+            else:
+                file_data = json.loads(temp[0]['fields']['file_url'].replace("'","\"")) 
+                temp[0]['fields']['file_url'] = []
+                for i in range(len(file_data)):
+                    temp[0]['fields']['file_url'] += file_data[i].items()
+                    
+            if(temp[0]['fields']['content'] == None or temp[0]['fields']['content'].replace(" ", "") == ""):
+                temp[0]['fields']['content'] = ""
             
             data = json.dumps(temp[0]['fields'], indent=2, ensure_ascii=False)
             return HttpResponse(content=data)
         except Exception as e:
             return JsonResponse({'message':str(e)},status=HTTPStatus.BAD_REQUEST)
+        
         
 
 class NoticeSearch(View):
