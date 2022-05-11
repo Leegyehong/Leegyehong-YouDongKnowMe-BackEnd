@@ -1,0 +1,5 @@
+root_url : https://www.dongyang.ac.kr/dmu_23220/1788/subview.do
+data_dir : ./crawler/test/
+
+major_name : 컴정과
+major_code : 302
