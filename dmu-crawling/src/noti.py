@@ -50,8 +50,11 @@ class NotiCrawler(CrawlerBase):
         while True:
             time.sleep(2)
             tr = driver.find_elements_by_css_selector('table > tbody > tr:not(.notice)')
+            print('df size : ', len(df))
+            if len(df) > 500:
+                print('crawling End')
+                break
             for i in range(len(tr)):
-                print(i)
                 tr = driver.find_elements_by_css_selector('table > tbody > tr:not(.notice)')
                 print('meta crawling start')
                 num = tr[i].find_element_by_css_selector('.td-num').text
@@ -83,6 +86,7 @@ class NotiCrawler(CrawlerBase):
                 driver.back()
                 time.sleep(1)
                 df = df.append(pd.Series([config.major_code, num, title, writer, date, content, ' '.join(f for f in img_url_list) ,file_list], index=df.columns), ignore_index= True)
+            
             time.sleep(1)
             
             pages = driver.find_elements_by_css_selector('form:nth-child(3) > div > div > ul >li')
@@ -107,5 +111,3 @@ class NotiCrawler(CrawlerBase):
         # conn = engine.connect()
         # data.to_sql(name='noti',con = conn, if_exists='append')
         # conn.close()
-        
-        

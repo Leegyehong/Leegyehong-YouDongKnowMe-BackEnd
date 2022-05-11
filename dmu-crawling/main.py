@@ -16,7 +16,7 @@ from src.noti import NotiCrawler
 
 import pandas as pd
 from sqlalchemy import create_engine 
-from tabulate import tabulate
+#from tabulate import tabulate
 #from utils.drivers.unzipper import InstallDriver
 
 
