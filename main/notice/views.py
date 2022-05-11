@@ -21,7 +21,7 @@ class NoticeList(View):
             else:
                 data = serializers.serialize("json", list(
                     notice), fields=('num', 'title','date', 'writer'))
-                temp = json.loads(data)
+                temp = json.loads(data)     
                 datalist = []  
                 for i in range(len(temp)):
                     datalist.append(temp[i]['fields'])
@@ -48,11 +48,8 @@ class NoticeDetail(View):
             if(temp[0]['fields']['file_url'] == "[]"):
                 temp[0]['fields']['file_url'] = [""]
             else:
-                file_data = json.loads(temp[0]['fields']['file_url'].replace("'","\"")) 
-                temp[0]['fields']['file_url'] = []
-                for i in range(len(file_data)):
-                    temp[0]['fields']['file_url'] += file_data[i].items()
-                    
+                temp[0]['fields']['file_url'] = json.loads(temp[0]['fields']['file_url'].replace("'","\"")) 
+
             if(temp[0]['fields']['content'] == None or temp[0]['fields']['content'].replace(" ", "") == ""):
                 temp[0]['fields']['content'] = ""
             
