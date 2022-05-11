@@ -29,6 +29,7 @@ services:
       && cd /home/youdongknowme && python insert_data.py
       && cd /home/youdongknowme/main
       && rm -rf */migrations/000*.py
+      && pip install -r /home/youdongknowme/requirements.txt
       && python manage.py inspectdb --database=crawled_data > 'notice/models.py'
       && python manage.py makemigrations
       && python manage.py migrate
