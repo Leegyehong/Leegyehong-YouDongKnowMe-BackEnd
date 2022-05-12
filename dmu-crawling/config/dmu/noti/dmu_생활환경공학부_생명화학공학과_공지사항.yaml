@@ -1,0 +1,5 @@
+root_url : https://www.dongyang.ac.kr/dmu_23245/1818/subview.do
+data_dir : ./crawler/test/
+
+major_name : 생명화학공학과
+major_code : 501

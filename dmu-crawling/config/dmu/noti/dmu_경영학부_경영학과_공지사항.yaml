@@ -1,0 +1,5 @@
+root_url : https://www.dongyang.ac.kr/dmu_23232/1866/subview.do
+data_dir : ./crawler/test/
+
+major_name : 경영학과
+major_code : 601

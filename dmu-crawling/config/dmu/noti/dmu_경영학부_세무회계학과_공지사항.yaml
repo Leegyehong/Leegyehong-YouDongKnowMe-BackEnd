@@ -1,0 +1,5 @@
+root_url : https://www.dongyang.ac.kr/dmu_23234/1875/subview.do
+data_dir : ./crawler/test/
+
+major_name : 세무회계학과
+major_code : 602

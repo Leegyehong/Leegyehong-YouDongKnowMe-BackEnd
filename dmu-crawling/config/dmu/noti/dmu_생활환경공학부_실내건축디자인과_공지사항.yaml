@@ -1,0 +1,5 @@
+root_url : https://www.dongyang.ac.kr/dmu_23256/1845/subview.do
+data_dir : ./crawler/test/
+
+major_name : 실내건축디자인과
+major_code : 504
