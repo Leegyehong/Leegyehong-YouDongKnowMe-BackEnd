@@ -105,7 +105,7 @@ class NotiCrawler(CrawlerBase):
                         break
         
         
-        df.to_csv(f'./{config.indicator}.csv', index=False)
+        df.to_csv(f'./crawled/{config.indicator}.csv', index=False)
         # data = pd.read_csv(f'./{config.indicator}.csv')
         # engine = create_engine("postgresql://postgres:postgres@localhost:5432/CrawledData", convert_unicode = False, connect_args={'connect_timeout': 3})
         # conn = engine.connect()
