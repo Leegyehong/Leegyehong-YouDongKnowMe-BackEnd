@@ -1,7 +1,7 @@
 from dataclasses import fields
 from logging import exception
 from multiprocessing.sharedctypes import Value
-from re import L
+from re import A, L
 from django.http import HttpResponse,JsonResponse,Http404
 from django.views import View
 from .models import Noti
@@ -39,7 +39,7 @@ class NoticeDetail(View):
                 'num', 'title', 'writer', 'content', 'file_url', 'date', 'img_url'))
             
             temp = json.loads(data)
-            
+  
             if(temp[0]['fields']['img_url'] == None):
                 temp[0]['fields']['img_url'] = [""]
             else:
@@ -48,11 +48,19 @@ class NoticeDetail(View):
             if(temp[0]['fields']['file_url'] == "[]"):
                 temp[0]['fields']['file_url'] = [""]
             else:
-                temp[0]['fields']['file_url'] = json.loads(temp[0]['fields']['file_url'].replace("'","\"")) 
-
+                fileData = json.loads(temp[0]['fields']['file_url'].replace("'","\"")) 
+                urlList = []
+                temp[0]['fields']['file_url'] = []
+                for i in fileData:
+                    urlList += list(i.keys()) 
+                for i in range(len(urlList)):
+                    fileList = {}
+                    fileList['url'] = urlList[i]
+                    fileList['name'] = fileData[i].get(urlList[i])
+                    temp[0]['fields']['file_url'].append(fileList)
             if(temp[0]['fields']['content'] == None or temp[0]['fields']['content'].replace(" ", "") == ""):
                 temp[0]['fields']['content'] = ""
-            
+
             data = json.dumps(temp[0]['fields'], indent=2, ensure_ascii=False)
             return HttpResponse(content=data)
         except Exception as e:
