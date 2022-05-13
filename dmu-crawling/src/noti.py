@@ -51,7 +51,7 @@ class NotiCrawler(CrawlerBase):
             time.sleep(2)
             tr = driver.find_elements_by_css_selector('table > tbody > tr:not(.notice)')
             print('df size : ', len(df))
-            if len(df) > 500:
+            if len(df) > 150:
                 print('crawling End')
                 break
             for i in range(len(tr)):
