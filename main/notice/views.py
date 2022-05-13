@@ -46,7 +46,11 @@ class NoticeDetail(View):
                 temp[0]['fields']['img_url'] = temp[0]['fields']['img_url'].split()
             
             if(temp[0]['fields']['file_url'] == "[]"):
-                temp[0]['fields']['file_url'] = [""]
+                temp[0]['fields']['file_url'] = []
+                fileList = {}
+                fileList['url'] = ""
+                fileList['name'] = ""
+                temp[0]['fields']['file_url'].append(fileList)
             else:
                 fileData = json.loads(temp[0]['fields']['file_url'].replace("'","\"")) 
                 urlList = []
