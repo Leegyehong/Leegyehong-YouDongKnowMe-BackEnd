@@ -1,7 +1,7 @@
 from dataclasses import fields
 from logging import exception
 from multiprocessing.sharedctypes import Value
-from re import L
+from re import A, L
 from django.http import HttpResponse,JsonResponse,Http404
 from django.views import View
 from .models import Noti
@@ -13,132 +13,79 @@ import json
 
 
 class NoticeList(View):
-    """
-    def get(self, requset, major):
-         try:
-            notice = Noti.objects.using('crawled_data').filter(major = major).order_by('-num')
-            if notice.count() == 0:
-                raise Exception()
-            else:
-                data = serializers.serialize("json", list(
-                    notice), fields=('num', 'title','date', 'writer'))
-                temp = json.loads(data)
-                datalist = []  
-                for i in range(len(temp)):
-                    datalist.append(temp[i]['fields'])
-                data = json.dumps(datalist, indent=2, ensure_ascii=False)
-                return HttpResponse(data, content_type="text/json-comment-filtered")
-        except Exception as e:
-            return JsonResponse({'message':'error'},status=HTTPStatus.BAD_REQUEST)
-    """
-
-    def get(self, requset):
+    def get(self,request,major):
         try:
-            notice = Noti.objects.using('crawled_data').all().order_by('-num')
+            notice = Noti.objects.using('crawled_data').filter(major_code = major).order_by('-num')
             if notice.count() == 0:
                 raise Exception()
             else:
                 data = serializers.serialize("json", list(
                     notice), fields=('num', 'title','date', 'writer'))
-                temp = json.loads(data)
+                temp = json.loads(data)     
                 datalist = []  
                 for i in range(len(temp)):
                     datalist.append(temp[i]['fields'])
                 data = json.dumps(datalist, indent=2, ensure_ascii=False)
                 return HttpResponse(data, content_type="application/json")
         except Exception as e:
-            return JsonResponse({'message':'error'},status=HTTPStatus.BAD_REQUEST)
-            #raise JS('게시글을 찾을 수 없습니다 다시 요청해주세요!')
-
+            return JsonResponse({'message':str(e)},status=HTTPStatus.BAD_REQUEST)
 
 class NoticeDetail(View):
-
-    def get(self, requset, noticenum):
+    def get(self, request, noticenum,major):
         try:
-            noticedetail = Noti.objects.using('crawled_data').filter(num = noticenum).order_by('-num')
+            noticedetail = Noti.objects.using('crawled_data').filter(num = noticenum,major_code = major).order_by('-num')
+        
             data = serializers.serialize("json", noticedetail, fields=(
                 'num', 'title', 'writer', 'content', 'file_url', 'date', 'img_url'))
             
             temp = json.loads(data)
-            
-            for i in temp[0]['fields']:
-                try:
-                    if(temp[0]['fields'][i] == None or temp[0]['fields'][i].replace(" ", "") == ""):
-                        temp[0]['fields'][i] = ""
-                except:
-                    pass
-                
-            if(temp[0]['fields']['file_url'] != ""):
-                temp[0]['fields']['file_url'] = temp[0]['fields']['file_url'].split()
-            if(temp[0]['fields']['img_url'] != ""):
+  
+            if(temp[0]['fields']['img_url'] == None):
+                temp[0]['fields']['img_url'] = [""]
+            else:
                 temp[0]['fields']['img_url'] = temp[0]['fields']['img_url'].split()
-                
+            
+            if(temp[0]['fields']['file_url'] == "[]"):
+                temp[0]['fields']['file_url'] = []
+                fileList = {}
+                fileList['url'] = ""
+                fileList['name'] = ""
+                temp[0]['fields']['file_url'].append(fileList)
+            else:
+                fileData = json.loads(temp[0]['fields']['file_url'].replace("'","\"")) 
+                urlList = []
+                temp[0]['fields']['file_url'] = []
+                for i in fileData:
+                    urlList += list(i.keys()) 
+                for i in range(len(urlList)):
+                    fileList = {}
+                    fileList['url'] = urlList[i]
+                    fileList['name'] = fileData[i].get(urlList[i])
+                    temp[0]['fields']['file_url'].append(fileList)
+            if(temp[0]['fields']['content'] == None or temp[0]['fields']['content'].replace(" ", "") == ""):
+                temp[0]['fields']['content'] = ""
+
             data = json.dumps(temp[0]['fields'], indent=2, ensure_ascii=False)
             return HttpResponse(content=data)
-        
         except Exception as e:
-            return JsonResponse({'message':'error'},status=HTTPStatus.BAD_REQUEST)
-
-"""
-   class NoticeDetail(View):
-    
-    def get(self, requset, noticenum, major):
-        try:
-            noticedetail = Noti.objects.using('crawled_data').filter(num = noticenum, major = major).order_by('-num')
-            data = serializers.serialize("json", noticedetail, fields=(
-                'num', 'title', 'writer', 'content', 'file_url', 'date', 'img_url'))
-            temp = json.loads(data)
-            for i in temp[0]['fields']:
-                if(temp[0]['fields'][i] == None or temp[0]['fields'][i].replace(" ", "") == ""):
-                    temp[0]['fields'][i] = ""
-                
-            if(temp[0]['fields']['file_url'] != ""):
-                temp[0]['fields']['file_url'] = temp[0]['fields']['file_url'].split()
-            if(temp[0]['fields']['img_url'] != ""):
-                temp[0]['fields']['img_url'] = temp[0]['fields']['img_url'].split()
-                
-            data = json.dumps(temp, indent=2, ensure_ascii=False)
-            return HttpResponse(content=data)
+            return JsonResponse({'message':str(e)},status=HTTPStatus.BAD_REQUEST)
         
-        except Exception as e:
-            return JsonResponse({'message':'error'},status=HTTPStatus.BAD_REQUEST)
-"""
+        
 
 class NoticeSearch(View):
-    def get(self, request):
+    def get(self, request, major):
         try:
             keyword = request.GET['keyword']
-            print(keyword)
             searchList = Noti.objects.using('crawled_data').filter(
-                title__contains=keyword).order_by('-num')
-            if searchList.count() == 0:
-                raise Exception()
-            else:
-                data = serializers.serialize("json", list(
-                    searchList), fields=('num', 'title', 'date', 'writer'))
-                temp = json.loads(data)
-                datalist = []
-                for i in range(len(temp)):
-                    datalist.append(temp[i]['fields'])
-                data = json.dumps(datalist, indent=2, ensure_ascii=False)
-                return HttpResponse(data, content_type="application/json")
+                title__contains=keyword,major_code = major).order_by('-num')     
+            data = serializers.serialize("json", list(
+                searchList), fields=('num', 'title', 'date', 'writer'))
+            temp = json.loads(data)
+            datalist = []
+            for i in range(len(temp)):
+                datalist.append(temp[i]['fields'])
+            data = json.dumps(datalist, indent=2, ensure_ascii=False)
+            return HttpResponse(data, content_type="application/json")
         except Exception as e:
-            return JsonResponse({'message': 'error'}, status=HTTPStatus.BAD_REQUEST)
-    """
-    def get(self, requset, search, major):
-        try :
-            searchList = Noti.objects.using('crawled_data').filter(title__contains = search, major = major).order_by('-num')
-            if searchList.count() == 0:
-                raise Exception()
-            else:
-                data = serializers.serialize("json", list(
-                    searchList), fields=('num', 'title','date', 'writer'))
-                temp = json.loads(data)
-                datalist = []  
-                for i in range(len(temp)):
-                    datalist.append(temp[i]['fields'])
-                data = json.dumps(datalist, indent=2, ensure_ascii=False)
-                return HttpResponse(data, content_type="application/json")
-        except Exception as e:
-            return JsonResponse({'message':'error'},status=HTTPStatus.BAD_REQUEST)
-    """
+            return JsonResponse({'message': str(e)}, status=HTTPStatus.BAD_REQUEST)
+
