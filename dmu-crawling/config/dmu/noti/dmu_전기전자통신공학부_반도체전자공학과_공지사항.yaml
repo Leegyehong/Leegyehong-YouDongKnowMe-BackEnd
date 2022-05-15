@@ -1,0 +1,5 @@
+root_url : https://www.dongyang.ac.kr/dmu_23216/1767/subview.do
+data_dir : ./crawler/test/
+
+major_name : 반도체전자공학과
+major_code : 403

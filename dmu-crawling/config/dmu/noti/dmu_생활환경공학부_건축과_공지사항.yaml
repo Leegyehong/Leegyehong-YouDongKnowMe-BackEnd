@@ -1,0 +1,5 @@
+root_url : https://www.dongyang.ac.kr/dmu_23015/1836/subview.do
+data_dir : ./crawler/test/
+
+major_name : 건축과
+major_code : 503

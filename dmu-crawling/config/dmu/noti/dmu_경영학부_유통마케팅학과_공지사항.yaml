@@ -1,0 +1,5 @@
+root_url : https://www.dongyang.ac.kr/dmu_23236/1884/subview.do
+data_dir : ./crawler/test/
+
+major_name : 유통마게팅학과
+major_code : 603
