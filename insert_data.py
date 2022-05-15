@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     path = "./dmu-crawling/crawled/"
     file_list = os.listdir(path)
-    engine = create_engine("postgresql://postgres:postgres@localhost:5432/crawled_data", convert_unicode = False, connect_args={'connect_timeout': 3})
+    engine = create_engine("postgresql://postgres:postgres@postgres:5432/crawled_data", convert_unicode = False, connect_args={'connect_timeout': 3})
     conn = engine.connect()
     noti = Table('noti', MetaData(), autoload=True, autoload_with=engine)
 
