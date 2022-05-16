@@ -8,3 +8,4 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 RUN apt -y install ./google-chrome-stable_current_amd64.deb
 RUN apt-get install -y build-essential libpq-dev
 RUN pip install --upgrade pip
+RUN pip install -r /home/youdongknowme/requirements.txt
