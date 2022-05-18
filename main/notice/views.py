@@ -4,7 +4,7 @@ from multiprocessing.sharedctypes import Value
 from re import A, L
 from django.http import HttpResponse,JsonResponse,Http404
 from django.views import View
-from .models import Noti
+from .models import Noti , Schedule
 from django.core import serializers
 from http import HTTPStatus
 import json
@@ -88,4 +88,23 @@ class NoticeSearch(View):
             return HttpResponse(data, content_type="application/json")
         except Exception as e:
             return JsonResponse({'message': str(e)}, status=HTTPStatus.BAD_REQUEST)
+        
+class scheduleList(View):
+    def get(self, request, month):
+        try:
+            uSchedule = Schedule.objects.using('crawled_data').filter(month = month).order_by('id')
+            data = serializers.serialize("json", list(
+                    uSchedule), fields=('date','content'))
+            temp = json.loads(data)     
+            datalist = []
+            for i in range(len(temp)):
+                datalist.append(temp[i]['fields'])
+            monthSchedule = {}
+            month = str(month)
+            monthSchedule[month]=datalist
+            data = json.dumps(monthSchedule, indent=2, ensure_ascii=False)
+            return HttpResponse(data, content_type="application/json")
+        except Exception as e:
+            return JsonResponse({'message':str(e)},status=HTTPStatus.BAD_REQUEST)
+
 
