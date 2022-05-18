@@ -59,6 +59,7 @@ class NotiCrawler(CrawlerBase):
                 print('meta crawling start')
                 num = tr[i].find_element_by_css_selector('.td-num').text
                 title = tr[i].find_element_by_css_selector('.td-subject').text
+                title = title.replace('\n새글', '')
                 writer = tr[i].find_element_by_css_selector('.td-write').text
                 date = tr[i].find_element_by_css_selector('.td-date').text
                 add_file = tr[i].find_element_by_css_selector('.td-file').text
