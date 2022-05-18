@@ -57,7 +57,8 @@ class ScheduleCrawler(CrawlerBase):
                 df = df.append(pd.Series([i,date_list[j].text, content_list[j].text ], index=df.columns), ignore_index= True)
         
         
-        df.to_csv(f'./crawled/{config.indicator}.csv', index=False)
+        #df.to_csv(f'./crawled/{config.indicator}.csv', index=False)
+        df.to_csv(f'./dmu-crawling/crawled/학교_학사일정.csv', index=False)
         # data = pd.read_csv(f'./{config.indicator}.csv')
         # engine = create_engine("postgresql://postgres:postgres@localhost:5432/CrawledData", convert_unicode = False, connect_args={'connect_timeout': 3})
         # conn = engine.connect()

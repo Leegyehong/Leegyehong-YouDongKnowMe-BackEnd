@@ -13,3 +13,9 @@ CREATE TABLE noti (
 	file_url text NULL,
     primary key(major_code, num)
 );
+
+CREATE TABLE schedule (
+	month int NOT NULL,
+	"date" text NOT NULL,
+	"content" text NULL
+);
