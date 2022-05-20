@@ -16,6 +16,7 @@ CREATE TABLE noti (
 
 CREATE TABLE schedule (
 	id SERIAL PRIMARY KEY,
+	year text NOT NULL,
 	month int NOT NULL,
 	"date" text NOT NULL,
 	"content" text NULL
