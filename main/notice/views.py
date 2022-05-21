@@ -99,9 +99,7 @@ class scheduleList(View):
             itemList = []
             for i in range(len(data)):
                 itemList.append(data[i]['fields'])
-            items = {}
-            items['items'] = itemList
-            data = json.dumps(items, indent=2, ensure_ascii=False)
+            data = json.dumps(itemList, indent=2, ensure_ascii=False)
             return HttpResponse(data, content_type="application/json")
         except Exception as e:
             return JsonResponse({'message':str(e)},status=HTTPStatus.BAD_REQUEST)
