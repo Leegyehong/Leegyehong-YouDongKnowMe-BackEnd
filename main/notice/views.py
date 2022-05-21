@@ -90,19 +90,44 @@ class NoticeSearch(View):
             return JsonResponse({'message': str(e)}, status=HTTPStatus.BAD_REQUEST)
         
 class scheduleList(View):
-    def get(self, request, month):
+    def get(self, request):
         try:
-            uSchedule = Schedule.objects.using('crawled_data').filter(month = month).order_by('id')
+            uSchedule = Schedule.objects.using('crawled_data').all().order_by('id')
             data = serializers.serialize("json", list(
                     uSchedule), fields=('date','content'))
-            temp = json.loads(data)     
-            datalist = []
-            for i in range(len(temp)):
-                datalist.append(temp[i]['fields'])
-            monthSchedule = {}
-            month = str(month)
-            monthSchedule[month]=datalist
-            data = json.dumps(monthSchedule, indent=2, ensure_ascii=False)
+            year = serializers.serialize("json", list(
+                    uSchedule), fields=('year'))
+            month = serializers.serialize("json", list(
+                    uSchedule), fields=('month'))           
+            data = json.loads(data) 
+            year =  json.loads(year)   
+            month =  json.loads(month)   
+            monthList = []    
+            yearList = [] 
+            tempList = []
+            yearCheck = year[0]['fields']
+            monthCheck = month[0]['fields']
+            for i in range(len(data)):
+                if monthCheck != month[i]['fields']:
+                    temp = {}
+                    temp[str(month[i-1]['fields']['month'])] = monthList
+                    yearList.append(temp)
+                    monthCheck = month[i]['fields']
+                    monthList = []   
+                if yearCheck != year[i]['fields']:
+                    yearTemp = {}
+                    yearTemp[year[i-1]['fields']['year']]= yearList
+                    tempList.append(yearTemp)
+                    yearCheck = year[i]['fields']
+                    yearList = []
+                monthList.append(data[i]['fields'])
+            temp = {}
+            temp[str(month[i-1]['fields']['month'])] = monthList
+            yearList.append(temp) 
+            yearTemp = {}
+            yearTemp[year[i]['fields']['year']] = yearList
+            tempList.append(yearTemp)
+            data = json.dumps(tempList, indent=2, ensure_ascii=False)
             return HttpResponse(data, content_type="application/json")
         except Exception as e:
             return JsonResponse({'message':str(e)},status=HTTPStatus.BAD_REQUEST)
