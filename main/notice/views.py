@@ -105,6 +105,8 @@ class scheduleList(View):
             monthList = []    
             yearList = [] 
             tempList = []
+            scheduleYear = {}
+            scheduleMonth = {}
             yearCheck = year[0]['fields']
             monthCheck = month[0]['fields']
             for i in range(len(data)):
@@ -116,18 +118,23 @@ class scheduleList(View):
                     monthList = []   
                 if yearCheck != year[i]['fields']:
                     yearTemp = {}
-                    yearTemp[year[i-1]['fields']['year']]= yearList
+                    scheduleMonth['month'] = yearList
+                    print(scheduleMonth)
+                    yearTemp[year[i-1]['fields']['year']] = scheduleMonth
                     tempList.append(yearTemp)
                     yearCheck = year[i]['fields']
                     yearList = []
                 monthList.append(data[i]['fields'])
             temp = {}
+            scheduleMonth = {}
             temp[str(month[i-1]['fields']['month'])] = monthList
             yearList.append(temp) 
+            scheduleMonth['month'] = yearList
             yearTemp = {}
-            yearTemp[year[i]['fields']['year']] = yearList
+            yearTemp[year[i]['fields']['year']] = scheduleMonth
             tempList.append(yearTemp)
-            data = json.dumps(tempList, indent=2, ensure_ascii=False)
+            scheduleYear['year'] = tempList
+            data = json.dumps(scheduleYear, indent=2, ensure_ascii=False)
             return HttpResponse(data, content_type="application/json")
         except Exception as e:
             return JsonResponse({'message':str(e)},status=HTTPStatus.BAD_REQUEST)
