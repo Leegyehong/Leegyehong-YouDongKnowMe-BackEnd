@@ -94,47 +94,14 @@ class scheduleList(View):
         try:
             uSchedule = Schedule.objects.using('crawled_data').all().order_by('id')
             data = serializers.serialize("json", list(
-                    uSchedule), fields=('date','content'))
-            year = serializers.serialize("json", list(
-                    uSchedule), fields=('year'))
-            month = serializers.serialize("json", list(
-                    uSchedule), fields=('month'))           
+                    uSchedule), fields=('year','month','date','content'))
             data = json.loads(data) 
-            year =  json.loads(year)   
-            month =  json.loads(month)   
-            monthList = []    
-            yearList = [] 
-            tempList = []
-            scheduleYear = {}
-            scheduleMonth = {}
-            yearCheck = year[0]['fields']
-            monthCheck = month[0]['fields']
+            itemList = []
             for i in range(len(data)):
-                if monthCheck != month[i]['fields']:
-                    temp = {}
-                    temp[str(month[i-1]['fields']['month'])] = monthList
-                    yearList.append(temp)
-                    monthCheck = month[i]['fields']
-                    monthList = []   
-                if yearCheck != year[i]['fields']:
-                    yearTemp = {}
-                    scheduleMonth['month'] = yearList
-                    print(scheduleMonth)
-                    yearTemp[year[i-1]['fields']['year']] = scheduleMonth
-                    tempList.append(yearTemp)
-                    yearCheck = year[i]['fields']
-                    yearList = []
-                monthList.append(data[i]['fields'])
-            temp = {}
-            scheduleMonth = {}
-            temp[str(month[i-1]['fields']['month'])] = monthList
-            yearList.append(temp) 
-            scheduleMonth['month'] = yearList
-            yearTemp = {}
-            yearTemp[year[i]['fields']['year']] = scheduleMonth
-            tempList.append(yearTemp)
-            scheduleYear['year'] = tempList
-            data = json.dumps(scheduleYear, indent=2, ensure_ascii=False)
+                itemList.append(data[i]['fields'])
+            items = {}
+            items['items'] = itemList
+            data = json.dumps(items, indent=2, ensure_ascii=False)
             return HttpResponse(data, content_type="application/json")
         except Exception as e:
             return JsonResponse({'message':str(e)},status=HTTPStatus.BAD_REQUEST)
