@@ -42,23 +42,33 @@ class ScheduleCrawler(CrawlerBase):
             print(f'SUCCESS | Move to Root | {self.root_url}')
         except Exception as e:
             print(f'FAIL | Move to Root | {self.root_url}')
-    
+            
     def get_data(self, config):
         driver = self.driver
         
-        df = pd.DataFrame(columns=['month','date', 'content'])
+        df = pd.DataFrame(columns=['year', 'month','date', 'content'])
         schedules = driver.find_elements_by_css_selector('.yearSchdulWrap')
-        
+        year = driver.find_element_by_css_selector('#schdulWrap > div.wrap > div.search > strong').text.split(' ')[0]
         for i, schedule in enumerate(schedules,1):
             print(i, schedule)
             date_list = schedule.find_elements_by_tag_name('dt')
             content_list = schedule.find_elements_by_tag_name('dd')
             for j in range(len(date_list)):
-                df = df.append(pd.Series([i,date_list[j].text, content_list[j].text ], index=df.columns), ignore_index= True)
+                df = df.append(pd.Series([year, i,date_list[j].text, content_list[j].text ], index=df.columns), ignore_index= True)
+        driver.find_element_by_css_selector('#schdulWrap > div.wrap > div.search > a.DirectionRight.png').click()
+        time.sleep(2)
+        schedules = driver.find_elements_by_css_selector('.yearSchdulWrap')
+        year = driver.find_element_by_css_selector('#schdulWrap > div.wrap > div.search > strong').text.split(' ')[0]
+        for i, schedule in enumerate(schedules,1):
+            print(i, schedule)
+            date_list = schedule.find_elements_by_tag_name('dt')
+            content_list = schedule.find_elements_by_tag_name('dd')
+            for j in range(len(date_list)):
+                df = df.append(pd.Series([year, i,date_list[j].text, content_list[j].text ], index=df.columns), ignore_index= True)
         
         
         #df.to_csv(f'./crawled/{config.indicator}.csv', index=False)
-        df.to_csv(f'./dmu-crawling/crawled/학교_학사일정.csv', index=False)
+        df.to_csv(f'./dmu-crawling/crawled/schedule/학교_학사일정.csv', index=False)
         # data = pd.read_csv(f'./{config.indicator}.csv')
         # engine = create_engine("postgresql://postgres:postgres@localhost:5432/CrawledData", convert_unicode = False, connect_args={'connect_timeout': 3})
         # conn = engine.connect()
