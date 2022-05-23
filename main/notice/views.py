@@ -90,19 +90,16 @@ class NoticeSearch(View):
             return JsonResponse({'message': str(e)}, status=HTTPStatus.BAD_REQUEST)
         
 class scheduleList(View):
-    def get(self, request, month):
+    def get(self, request):
         try:
-            uSchedule = Schedule.objects.using('crawled_data').filter(month = month).order_by('id')
+            uSchedule = Schedule.objects.using('crawled_data').all().order_by('id')
             data = serializers.serialize("json", list(
-                    uSchedule), fields=('date','content'))
-            temp = json.loads(data)     
-            datalist = []
-            for i in range(len(temp)):
-                datalist.append(temp[i]['fields'])
-            monthSchedule = {}
-            month = str(month)
-            monthSchedule[month]=datalist
-            data = json.dumps(monthSchedule, indent=2, ensure_ascii=False)
+                    uSchedule), fields=('year','month','date','content'))
+            data = json.loads(data) 
+            itemList = []
+            for i in range(len(data)):
+                itemList.append(data[i]['fields'])
+            data = json.dumps(itemList, indent=2, ensure_ascii=False)
             return HttpResponse(data, content_type="application/json")
         except Exception as e:
             return JsonResponse({'message':str(e)},status=HTTPStatus.BAD_REQUEST)
