@@ -1,0 +1,5 @@
+root_url : https://www.dongyang.ac.kr/dmu_23259/1806/subview.do
+data_dir : ./crawler/test/
+
+major_name : 인공지능과
+major_code : 303

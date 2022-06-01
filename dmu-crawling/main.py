@@ -16,7 +16,7 @@ from src.noti import NotiCrawler
 
 import pandas as pd
 from sqlalchemy import create_engine 
-from tabulate import tabulate
+#from tabulate import tabulate
 #from utils.drivers.unzipper import InstallDriver
 
 
@@ -25,6 +25,7 @@ class Config:
     def __init__(self, config_dict):
         self.root_url = config_dict['root_url']
         self.indicator = config_dict['major_name']
+        self.major_code = config_dict['major_code']
         if self.indicator is not None:
             self.log_dir_name = f'{config_dict["data_dir"]}\\crawlled\\'+ datetime.datetime.now().strftime('%Y-%m-%d') + f'\\{self.indicator}'
         

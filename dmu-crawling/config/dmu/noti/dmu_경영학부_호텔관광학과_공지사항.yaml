@@ -1,0 +1,5 @@
+root_url : https://www.dongyang.ac.kr/dmu_23250/1893/subview.do
+data_dir : ./crawler/test/
+
+major_name : 호텔관광학과
+major_code : 604
