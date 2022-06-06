@@ -18,9 +18,7 @@ def send_to_firebase_cloud_messaging():
             'title' :'[코로나19] 확진자 발생 및 검사시행 안내',
             'topic' : topic
         },
-        # notification=messaging.Notification(
-        #     title = '등록하신 키워드 알림이 도착했습니다'
-        # ),
+        
         #token=registration_token,
         topic = topic,
     )
