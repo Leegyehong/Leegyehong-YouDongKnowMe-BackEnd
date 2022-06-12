@@ -8,7 +8,7 @@ from .models import Noti , Schedule
 from django.core import serializers
 from http import HTTPStatus
 import json
-
+import re
 # Create your views here.
 
 
@@ -39,12 +39,18 @@ class NoticeDetail(View):
                 'num', 'title', 'writer', 'content', 'file_url', 'date', 'img_url'))
             
             temp = json.loads(data)
-  
+
             if(temp[0]['fields']['img_url'] == None):
                 temp[0]['fields']['img_url'] = [""]
             else:
                 temp[0]['fields']['img_url'] = temp[0]['fields']['img_url'].split()
             
+            data = temp[0]['fields']
+            data['file_url'] = re.sub('{\'','{"',data['file_url'])
+            data['file_url'] = re.sub('\':','":',data['file_url'])
+            data['file_url'] = re.sub(': \'',':"',data['file_url'])
+            data['file_url'] = re.sub('\'}','"}',data['file_url'])
+
             if(temp[0]['fields']['file_url'] == "[]"):
                 temp[0]['fields']['file_url'] = []
                 fileList = {}
@@ -52,7 +58,8 @@ class NoticeDetail(View):
                 fileList['name'] = ""
                 temp[0]['fields']['file_url'].append(fileList)
             else:
-                fileData = json.loads(temp[0]['fields']['file_url'].replace("'","\"")) 
+                fileData = json.loads(data['file_url']) 
+            
                 urlList = []
                 temp[0]['fields']['file_url'] = []
                 for i in fileData:

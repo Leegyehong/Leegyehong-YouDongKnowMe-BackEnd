@@ -1,6 +1,6 @@
 #!/bin/sh
 
-searchdir=./config/dmu/temp
+searchdir=./config/dmu/noti
 
 for entry in $searchdir/*
 
