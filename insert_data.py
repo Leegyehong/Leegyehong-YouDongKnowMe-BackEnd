@@ -71,7 +71,7 @@ if __name__ == "__main__":
                 engine.execute(qr)
 
     data = pd.read_csv(f'./dmu-crawling/crawled/schedule/학교_학사일정.csv')
-    data.to_sql(name='schedule',con = conn, if_exists='replace', index= False)
+    data.to_sql(name='schedule',con = conn, if_exists='append', index= False)
     conn.close()
 
 
