@@ -81,7 +81,7 @@ class MenuPlanCrawler(CrawlerBase):
             driver.find_element_by_css_selector('#_JW_diet_basic > div > input._termRight').click()
         
         #df.to_csv(f'./crawled/{config.indicator}.csv', index=False)
-        df.to_csv(f'./dmu-crawling/crawled/schedule/학교_학사일정.csv', index=False)
+        df.to_csv(f'./dmu-crawling/crawled/menu/학교_식단.csv', index=False)
         # data = pd.read_csv(f'./{config.indicator}.csv')
         # engine = create_engine("postgresql://postgres:postgres@localhost:5432/CrawledData", convert_unicode = False, connect_args={'connect_timeout': 3})
         # conn = engine.connect()
