@@ -4,7 +4,7 @@ from multiprocessing.sharedctypes import Value
 from re import A, L
 from django.http import HttpResponse,JsonResponse,Http404
 from django.views import View
-from .models import Noti , Schedule
+from .models import Noti , Schedule , Menu
 from django.core import serializers
 from http import HTTPStatus
 import json
@@ -110,5 +110,18 @@ class scheduleList(View):
             return HttpResponse(data, content_type="application/json")
         except Exception as e:
             return JsonResponse({'message':str(e)},status=HTTPStatus.BAD_REQUEST)
-
-
+        
+class menuList(View):
+    def get(self, request):
+        try:
+            menuList = Menu.objects.using('crawled_data').all().order_by('date')
+            data = serializers.serialize("json", list(
+                    menuList), fields=('range','date','restaurant','menu_division','menu_content','etc_info'))
+            data = json.loads(data) 
+            itemList = []
+            for i in range(len(data)):
+                itemList.append(data[i]['fields'])
+            data = json.dumps(itemList, indent=2, ensure_ascii=False)
+            return HttpResponse(data, content_type="application/json")
+        except Exception as e:
+            return JsonResponse({'message':str(e)},status=HTTPStatus.BAD_REQUEST)
