@@ -1,0 +1,6 @@
+root_url : https://www.dongyang.ac.kr/dongyang/130/subview.do
+#root_url : https://www.dongyang.ac.kr/dongyang/129/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGZG9uZ3lhbmclMkY3JTJGYXJ0Y2xMaXN0LmRvJTNGaXNWaWV3TWluZSUzRGZhbHNlJTI2YmJzQ2xTZXElM0QlMjZzcmNoV3JkJTNEJTI2cmdzQmduZGVTdHIlM0QlMjZwYWdlJTNENTklMjZiYnNPcGVuV3JkU2VxJTNEJTI2cmdzRW5kZGVTdHIlM0QlMjZzcmNoQ29sdW1uJTNEJTI2
+data_dir : ./crawler/test/
+
+major_name : 학교_식단
+major_code : 999

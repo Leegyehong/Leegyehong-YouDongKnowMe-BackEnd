@@ -1,5 +1,5 @@
 Django
-selenium
+selenium==4.1.0
 webdriver-manager
 PyYaml
 pandas
