@@ -8,6 +8,19 @@
 from django.db import models
 
 
+class Menu(models.Model):
+    range = models.TextField()
+    date = models.TextField()
+    restaurant = models.TextField(blank=True, null=True)
+    menu_division = models.TextField(blank=True, null=True)
+    menu_content = models.TextField(blank=True, null=True)
+    etc_info = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'menu'
+
+
 class Noti(models.Model):
     major_code = models.IntegerField(primary_key=True)
     num = models.IntegerField()
@@ -25,9 +38,9 @@ class Noti(models.Model):
 
 
 class Schedule(models.Model):
-    year = models.BigIntegerField(blank=True, null=True)
-    month = models.BigIntegerField(blank=True, null=True)
-    date = models.TextField(blank=True, null=True)
+    year = models.TextField()
+    month = models.IntegerField()
+    date = models.TextField()
     content = models.TextField(blank=True, null=True)
 
     class Meta:
