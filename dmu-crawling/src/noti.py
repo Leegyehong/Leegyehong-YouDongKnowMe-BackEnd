@@ -51,7 +51,7 @@ class NotiCrawler(CrawlerBase):
             time.sleep(2)
             tr = driver.find_elements_by_css_selector('table > tbody > tr:not(.notice)')
             print('df size : ', len(df))
-            if len(df) > 150:
+            if len(df) >= 300:
                 print('crawling End')
                 break
             for i in range(len(tr)):
@@ -106,7 +106,7 @@ class NotiCrawler(CrawlerBase):
                         break
         
         
-        df.to_csv(f'./crawled/{config.indicator}.csv', index=False)
+        df.to_csv(f'./crawled/noti/{config.indicator}.csv', index=False)
         # data = pd.read_csv(f'./{config.indicator}.csv')
         # engine = create_engine("postgresql://postgres:postgres@localhost:5432/CrawledData", convert_unicode = False, connect_args={'connect_timeout': 3})
         # conn = engine.connect()
