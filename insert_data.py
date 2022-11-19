@@ -33,8 +33,8 @@ def send_to_firebase_cloud_messaging(major_code, num, title, keyword):
 
     message = messaging.Message(
         data={
-            'major_code': major_code,
-            'num': num,
+            'major_code': str(major_code),
+            'num': str(num),
             'title': title,
             'keyword': keyword
         },
