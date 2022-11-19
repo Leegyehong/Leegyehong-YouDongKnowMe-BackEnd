@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.append('.')
 import pandas as pd
-from sqlalchemy import create_engine, MetaData, Table
+from sqlalchemy import create_engine, MetaData, Table, text
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import messaging
@@ -26,8 +26,8 @@ def send_to_firebase_cloud_messaging(major_code, num, title, keyword):
     #registration_token = 'cdqgXE8IRJ2mkhbo9Qld2x:APA91bF3aQMyO87ZthR92VfOsdpg5ITKIUh9wOalHXl1SwfrtwCWAqOdOrrOxxUqgFDSQ5wSm0bk5kkO8NgKod1Iyi5SE14PXqFPAvcvisJphSKA8stZ-7cEpwUaHitXW2yadVOD8W8e'
     
     # TODO : 함수에서 파라미터를 받아서 해당 변수에 주입 필요 
-    major_code = major_code
-    num = num
+    major_code = str(major_code)
+    num = str(num)
     title = title
     keyword = keyword
 
@@ -56,7 +56,8 @@ if __name__ == "__main__":
     noti = Table('noti', MetaData(), autoload=True, autoload_with=engine)
 
     for file in file_list:
-        data = pd.read_csv(f'./dmu-crawling/crawled/noti/{file}')
+        print(file)
+        data = pd.read_csv(f'./dmu-crawling/crawled/noti/20221117/{file}')
         #print(data)
         #data.to_sql(name='noti',con = conn, if_exists='append', index=False)
         
@@ -65,21 +66,30 @@ if __name__ == "__main__":
         #conn.close()
 
         noti = Table('noti', MetaData(), autoload=True, autoload_with=engine)
+        print(noti.c)
         data = data.where(pd.notnull(data), None)
         for index, row in data.iterrows():
-            
             sql = f"""
                 select * from noti where major_code={row['major_code']} and num={row['num']}
             """
+
             result = engine.execute(sql).fetchall()
 
             if result:
-                qr=noti.update().where(noti.c.major_code==row['major_code'], noti.c.num==row['num']).values(
-                    major_code=row['major_code'], num=row['num'],title=row['title'], writer=row['writer'], date=row['date'], content=row['content'],img_url=row['img_url'] ,file_url=row['file_url']
-                )
-                print(qr)
-                engine.execute(qr)
+                # print('if')
+                # noti.update().where(noti.c.major_code==row['major_code'], noti.c.num==row['num']).values(major_code=row['major_code'], num=row['num'],title=row['title'], writer=row['writer'], date=row['date'], content=row['content'],img_url=row['img_url'] ,file_url=row['file_url'])
+                # qr=noti.update().where( noti.c.major_code==row['major_code'], noti.c.num==row['num']).values(
+                #     major_code=row['major_code'], num=row['num'],title=row['title'], writer=row['writer'], date=row['date'], content=row['content'],img_url=row['img_url'] ,file_url=row['file_url']
+                # )
+                # sql = f"""
+                #     update noti set major_code={row['major_code']}, num={row['num']}, title={row['title']}, writer={row['writer']}, date={row['date']}, content={row['content']},img_url={row['img_url']} ,file_url={row['file_url']} where major_code={row['major_code']} and num={row['num']}
+                # """
+                # print(qr)
+                # engine.execute(qr)
+                # engine.execute(text(sql)).fetchall()
+                pass
             else:
+                print('else')
                 qr = noti.insert().values(major_code=row['major_code'], num=row['num'],title=row['title'], writer=row['writer'], date=row['date'], content=row['content'],img_url=row['img_url'] ,file_url=row['file_url'])
                 engine.execute(qr)
                 for i in keyword:
