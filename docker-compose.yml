@@ -50,41 +50,41 @@ services:
     volumes:
       - ./postgresql/init/:/docker-entrypoint-initdb.d/
 
-  #Airflow
-  init:
-    image: *airflow_image
-    depends_on:
-      - postgres
-    environment: *airflow_environment
-    entrypoint: /bin/bash
-    command: -c 'airflow db upgrade && sleep 5 && airflow users create --username gyehong --password qwe1234 --firstname gyehong --lastname lee --role Admin --email khong0819@gmail.co.kr'
-  webserver:
-    image: *airflow_image
-    restart: always
-    depends_on:
-      - postgres
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
-      - ./airflow:/opt/airflow
-    environment: *airflow_environment
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    command: webserver
-  scheduler:
-    image: *airflow_image
-    restart: always
-    depends_on:
-      - postgres
-    volumes:
-      - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
-      - ./airflow:/opt/airflow
-    environment: *airflow_environment
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    command: scheduler
+  # #Airflow
+  # init:
+  #   image: *airflow_image
+  #   depends_on:
+  #     - postgres
+  #   environment: *airflow_environment
+  #   entrypoint: /bin/bash
+  #   command: -c 'airflow db upgrade && sleep 5 && airflow users create --username gyehong --password qwe1234 --firstname gyehong --lastname lee --role Admin --email khong0819@gmail.co.kr'
+  # webserver:
+  #   image: *airflow_image
+  #   restart: always
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - ./airflow/dags:/opt/airflow/dags
+  #     - ./airflow/logs:/opt/airflow/logs
+  #     - ./airflow/plugins:/opt/airflow/plugins
+  #     - ./airflow:/opt/airflow
+  #   environment: *airflow_environment
+  #   extra_hosts:
+  #     - "host.docker.internal:host-gateway"
+  #   command: webserver
+  # scheduler:
+  #   image: *airflow_image
+  #   restart: always
+  #   depends_on:
+  #     - postgres
+  #   volumes:
+  #     - ./airflow/dags:/opt/airflow/dags
+  #     - ./airflow/logs:/opt/airflow/logs
+  #     - ./airflow/plugins:/opt/airflow/plugins
+  #     - ./airflow:/opt/airflow
+  #   environment: *airflow_environment
+  #   extra_hosts:
+  #     - "host.docker.internal:host-gateway"
+  #   command: scheduler
