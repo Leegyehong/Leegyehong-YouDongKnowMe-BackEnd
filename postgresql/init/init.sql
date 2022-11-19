@@ -21,3 +21,13 @@ CREATE TABLE schedule (
 	"date" text NOT NULL,
 	"content" text NULL
 );
+
+CREATE TABLE menu(
+	id SERIAL PRIMARY KEY,
+	range text NOT NULL,
+	date text NOT NULL,
+	restaurant text NULL,
+	menu_division text NULL,
+	menu_content text NULL,
+	etc_info text NULL
+)
