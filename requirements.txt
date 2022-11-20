@@ -5,3 +5,4 @@ PyYaml
 pandas
 sqlalchemy
 PyJWT==2.3.0
+firebase_admin
